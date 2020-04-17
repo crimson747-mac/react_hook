@@ -1,38 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const content = [
-  {
-    tab: "Section 1",
-    content: "I'm the content of the Section 1",
-  },
-  {
-    tab: "Section 2",
-    content: "I'm the content of the Section 2",
-  },
-];
+// useEffect: componentWillUnmount + componentDidMount + componentDidUpdate
+// useEffect 는 첫 번째 인자로 함수를 받는다.
 
-const useTabs = (initialTab, allTabs) => {
-  // if (!allTabs || !Array.isArray(allTabs)) {
-  //   return;
-  // }
-  const [currentIndex, setCurrentIndex] = useState(initialTab);
-  return {
-    currentItem: allTabs[currentIndex],
-    changeItem: setCurrentIndex,
-  };
-};
+// 두 번째 인자는 deps(dependency) 이며 만약 deps가 있다면
+// useEffect는 deps 리스트에 있는 값일 때만 componentDidUpate가 발생한다.
 
+// useEffect는 함수를 리턴하는데 그게 componentWillUnmount 이다.
 const App = () => {
-  const { currentItem, changeItem } = useTabs(0, content);
+  const sayHello = () => console.log("hello");
+
+  const [number, setNumber] = useState(0);
+  const [aNumber, setAnumber] = useState(0);
+  useEffect(sayHello, [number]);
+  //useEffect(sayHello, []); => compoenentDidMount 가 로드시 한 번만 실행된다.
+
   return (
     <div className="App">
       <h1>Hello</h1>
-      {content.map((section, index) => (
-        <button key={index} onClick={() => changeItem(index)}>
-          {section.tab}
-        </button>
-      ))}
-      <div>{currentItem.content}</div>
+      <button onClick={() => setNumber(number + 1)}>{number}</button>
+      <button onClick={() => setAnumber(aNumber + 1)}>{aNumber}</button>
     </div>
   );
 };
