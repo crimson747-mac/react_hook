@@ -1,23 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const usePreventLeave = () => {
-  const listener = (event) => {
-    event.preventDefault();
-    event.returnValue = ""; // google chrome only
-  };
-  const enablePrevent = () => window.addEventListener("beforeunload", listener);
-  const disablePrevent = () =>
-    window.removeEventListener("beforeunload", listener);
+const useFadeIn = (duration = 1, delay = 0) => {
+  const element = useRef();
+  useEffect(() => {
+    if (element.current) {
+      const { current } = element;
+      current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
+      current.style.opacity = 1;
+    }
+  }, []);
 
-  return { enablePrevent, disablePrevent };
+  return { ref: element, style: { opacity: 0 } };
 };
 
 const App = () => {
-  const { enablePrevent, disablePrevent } = usePreventLeave();
+  const fadeInH1 = useFadeIn(1, 2);
+  const fadeInP = useFadeIn(3, 5);
   return (
     <div className="App">
-      <button onClick={enablePrevent}>protect</button>
-      <button onClick={disablePrevent}>unprotect</button>
+      <h1 {...fadeInH1}>Hello</h1>
+      <p {...fadeInP}>test</p>
     </div>
   );
 };
